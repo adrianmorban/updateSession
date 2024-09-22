@@ -8,17 +8,24 @@ const client = new DynamoDBClient({
 const ddbDocClient = DynamoDBDocumentClient.from(client);
 
 const updateSession = async (event) => {
-    const { from, messages, chatID } = event;
+
+    const { message, SessionData } = event;
+
+    const { result } = SessionData;
+
+    const { from, chat } = message;
+
     const { id, first_name, last_name, language_code } = from;
+
     const command = new PutCommand({
         TableName: "sallySessions",
         Item: {
             sessionID: id.toString(),
-            chatID: chatID,
+            chatID: chat.id,
             first_name: first_name,
             last_name: last_name,
             language_code: language_code,
-            messages: messages,
+            messages: result,
             TTL: Math.floor(Date.now() / 1000) + 3600,
         },
         removeUndefinedValues: true,
