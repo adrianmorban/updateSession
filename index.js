@@ -35,7 +35,7 @@ const updateSession = async (event) => {
         await ddbDocClient.send(command);
         return {
             chatID: chat.id,
-            messages: result[result.length - 1].content,
+            message: result[result.length - 1].content,
         }
     }
     catch(e){
