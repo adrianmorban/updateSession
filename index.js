@@ -31,8 +31,17 @@ const updateSession = async (event) => {
         removeUndefinedValues: true,
         removeNullValues: true,
     });
-    const response = await ddbDocClient.send(command);
-    return response;
+    try{
+        await ddbDocClient.send(command);
+        return {
+            chatID: chat.id,
+            messages: result[result.length - 1].content,
+        }
+    }
+    catch(e){
+        console.error("Error: ", e);
+        throw e;
+    }
 }
 
 export { updateSession };
